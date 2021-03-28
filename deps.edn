@@ -1,0 +1,56 @@
+{
+ :paths   ["src" "resources" "classes"]
+
+ :deps    {org.clojure/clojure       {:mvn/version "1.10.3"}
+           org.clojure/core.async    {:mvn/version "1.3.610"}
+           org.clojure/tools.logging {:mvn/version "1.1.0"}
+
+           aleph/aleph               {:mvn/version "0.4.7-alpha7"}
+
+           buddy/buddy-core          {:mvn/version "1.9.0"}
+           buddy/buddy-sign          {:mvn/version "3.3.0"}
+           clj-http/clj-http         {:mvn/version "3.12.1"}
+           compojure/compojure       {:mvn/version "1.6.2"}}
+
+ :aliases {
+           :test
+           {:extra-paths ["test"]
+            :extra-deps  {com.cognitect/test-runner {:git/url "https://github.com/cognitect-labs/test-runner.git"
+                                                     :sha     "b6b3193fcc42659d7e46ecd1884a228993441182"}}
+            :main-opts   ["-m" "cognitect.test-runner"]}
+
+           :outdated
+           {:extra-deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
+            :main-opts  ["-m" "antq.core"]}
+
+           :check
+           {:extra-deps {athos/clj-check
+                         {:git/url "https://github.com/athos/clj-check.git"
+                          :sha     "518d5a1cbfcd7c952f548e6dbfcb9a4a5faf9062"}}
+            :main-opts  ["-m" "clj-check.check"]}
+
+           :test/cloverage
+           {:extra-paths ["test"]
+            :extra-deps  {cloverage/cloverage {:mvn/version "RELEASE"}}
+            :main-opts   ["-m" "cloverage.coverage"
+                          "--src-ns-path" "src"
+                          "--test-ns-path" "test"]
+            :exec-fn     cloverage.coverage/run-project
+            :exec-args   {:src-ns-path  ["src"]
+                          :test-ns-path ["test"]}}
+
+           :lint/kondo
+           {:extra-deps {clj-kondo/clj-kondo {:mvn/version "RELEASE"}}
+            :main-opts  ["-m" "clj-kondo.main" "--lint" "src"]}
+
+           :lint/eastwood
+           {:main-opts  ["-m" "eastwood.lint" {:source-paths ["src"]}]
+            :extra-deps {jonase/eastwood {:mvn/version "RELEASE"}}}
+
+           :jar
+           {:extra-deps {com.github.seancorfield/depstar {:mvn/version "2.0.206"}}
+            :main-opts  ["-m" "hf.depstar.jar" "target/connect-v0.1.0.jar"]}
+
+           :uberjar
+           {:extra-deps {com.github.seancorfield/depstar {:mvn/version "2.0.206"}}
+            :main-opts  ["-m" "hf.depstar.uberjar" "target/connect-full-v0.1.0.jar" "-C" "-m" "com.eldrix.concierge.core"]}}}
